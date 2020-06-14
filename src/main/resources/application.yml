@@ -1,0 +1,15 @@
+spring:
+  server: #生产环境下的配置
+    port: 8080
+    serverlet:
+      context-path: /doki2
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/doki2?chracterEncoding=utf-8
+    username: root
+    password: v09809809800
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: false
