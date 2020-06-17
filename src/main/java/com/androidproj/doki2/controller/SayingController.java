@@ -96,7 +96,6 @@ public class SayingController {
             //从环境中查询用用户信息，如果用户信息和当前saing对得上，才执行添加私有评论的操作
             if(user!=null){
                 saying = this.sayingService.getSaying(sayingId);
-                if(saying==null)return "当前说说不存在";
                 if(user.getPhoneNumber().equals(saying.getFromUserPhoneNum())
                         ||user.getPhoneNumber().equals(saying.getToUserPhoneNum())){
                     try{
