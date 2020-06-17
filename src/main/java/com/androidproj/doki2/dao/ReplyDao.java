@@ -10,6 +10,7 @@ import java.util.List;
 
 @Repository
 public interface ReplyDao extends JpaRepository<Reply,Integer> {
-    Reply findByReplyId(int reply_id) throws Exception;
-    List<Reply> findAllBySayingAndIsPublic(Saying saying,boolean isPublic);
+    Reply findByReplyId(int reply_id);
+    //List<Reply> findAllBySaying_IdAndIsPublic(int saying_id,boolean isPublic);
+    List<Reply> findAllBySaying_SayingIdAndIsPublic(int saying_id,boolean isPublic);
 }

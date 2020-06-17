@@ -1,5 +1,6 @@
 package com.androidproj.doki2.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -43,10 +44,11 @@ public class Saying {
     private String sayingImageSrc;
     private boolean isPublic;
 
-    @OneToMany(mappedBy = "saying",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+
+    //@Transient
+    @OneToMany(mappedBy = "saying",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    //@JsonManagedReference
     ////@JoinColumn(name = "saying_id") //@JoinColum（多端外键）不能和mappedBy（一端）同时出现
-    @OrderBy("id DESC")
-   @Where(clause = "level=1")
     private List<Reply> replyList = new ArrayList<>();
 
 
@@ -150,12 +152,13 @@ public class Saying {
         isPublic = aPublic;
     }
 
-    public List<Reply> getReplyList() {
-        return replyList;
-    }
+//    public List<Reply> getReplyList() {
+//        return replyList;
+//    }
+//
+//    public void setReplyList(List<Reply> replyList) {
+//        this.replyList = replyList;
+//    }
 
-    public void setReplyList(List<Reply> replyList) {
-        this.replyList = replyList;
-    }
 }
 

@@ -13,3 +13,9 @@ spring:
       ddl-auto: update
     show-sql: true
     open-in-view: false
+  #security:
+    #basic:
+      #enabled: true
+    #user:
+      #name: 12345678900 #实际使用手机号而非用户名进行登陆，需要在实现了UserDetails的User中配置，也需要在实现UserDetailsService的类中重载loadUserByUserName方法
+      #password: 1234

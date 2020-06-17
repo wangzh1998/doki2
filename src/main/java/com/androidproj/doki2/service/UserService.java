@@ -11,6 +11,7 @@ public interface UserService{
 //    User queryUser(String phone_num) throws Exception;
 
     List<User> getAllUsers();
-    User addUser(User user) throws Exception;
-    User getUser(int user_id) throws Exception;
+    void addUser(User user) throws Exception;
+    User getUser(int user_id);
+    User getUser(String phoneNum);
 }

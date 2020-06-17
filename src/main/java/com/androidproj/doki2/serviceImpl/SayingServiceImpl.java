@@ -5,6 +5,10 @@ import com.androidproj.doki2.entity.Saying;
 import com.androidproj.doki2.entity.User;
 import com.androidproj.doki2.service.SayingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,36 +22,35 @@ public class SayingServiceImpl implements SayingService {
     }
 
     @Override
-    public Saying addSaying(Saying saying) throws Exception {
+    public void addSaying(Saying saying) throws Exception {
         Saying result = this.sayingDao.save(saying);
         if(result == null)
             throw new Exception("保存说说失败");
+    }
+
+    @Override
+    public Page<Saying> getPublicSayings(Integer pageNum){
+        Sort sort = Sort.by(Sort.Direction.DESC,"sayingId");
+        Pageable pageable = PageRequest.of(pageNum,3,sort);
+        return this.sayingDao.findAllByIsPublic(true,pageable);
+        //return this.sayingDao.findAll(pageable);
+    }
+
+    @Override
+    public List<Saying> getRelatedPrivateFromSayings(int user_id) {
+        List<Saying> result = this.sayingDao.findAllByFromUser_UniqUserId(user_id);
         return result;
     }
 
     @Override
-    public List<Saying> getAllPublicSayings() {
-        List<Saying> result = this.sayingDao.findAllByIsPublic(true);
+    public List<Saying> getRelatedPrivateToSayings(int user_id) {
+        List<Saying> result = this.sayingDao.findAllByToUser_UniqUserId(user_id);
         return result;
     }
 
     @Override
-    public List<Saying> getRelatedPrivateFromSayings(User user) {
-        List<Saying> result = this.sayingDao.findAllByFromUser(user);
-        return result;
-    }
-
-    @Override
-    public List<Saying> getRelatedPrivateToSayings(User user) {
-        List<Saying> result = this.sayingDao.findAllByToUser(user);
-        return result;
-    }
-
-    @Override
-    public Saying getSaying(int saying_id) throws Exception {
+    public Saying getSaying(int saying_id){
         Saying result = this.sayingDao.findBySayingId(saying_id);
-        if(result == null)
-            throw new Exception("查找说说失败");
         return result;
     }
 

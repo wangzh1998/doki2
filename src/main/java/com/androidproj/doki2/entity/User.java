@@ -1,7 +1,15 @@
+
 package com.androidproj.doki2.entity;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class User{
@@ -11,11 +19,13 @@ public class User{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int uniqUserId;
 
+    @Column(nullable = false,unique = true)
+    private String phoneNumber;
+
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private int gender;
+    private int gender = 0;
 
     @Column(nullable = true)
     private Date birthday;
@@ -23,62 +33,13 @@ public class User{
     @Column(nullable = false)
     private String realName;
 
-    @Column(nullable = false)
-    private String nickName;
+    private String nickName = "defaultNickName";
 
     @Column (nullable = true)
     private String email;
 
-    @Column(nullable = false)
-    private String phoneNumber;
-
-    @Column(nullable = false)
-    private String userImageSrc;
-
-
-
-//    //TODO 这里权限为空
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        List<GrantedAuthority> auths = new ArrayList();
-////        if (this.roleId == -1 || this.roleName==null||this.roleName.isEmpty()) {//this.role == null
-////            System.out.println("UserAndRole:role error");
-////        } else {
-////            auths.add(new SimpleGrantedAuthority());
-////        }
-//
-//        return auths;
-//    }
-//
-//    public String getPassword() {
-//        return password;
-//    }
-//
-//    //TODO 这里给userdetails中用的是phone_number
-//    @Override
-//    public String getUsername() {
-//        return phone_number;
-//    }
-//
-//    @Override
-//    public boolean isAccountNonExpired() {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean isAccountNonLocked() {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean isCredentialsNonExpired() {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean isEnabled() {
-//        return true;
-//    }
+    //TODO 将这里修改为正确的默认路径
+    private String userImageSrc = "defaultUserImageSrc";
 
 
     public User(){
@@ -117,9 +78,42 @@ public class User{
         this.uniqUserId = uniqUserId;
     }
 
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        List<GrantedAuthority> auths = new ArrayList();
+//        auths.add(new SimpleGrantedAuthority("ROLE_USER"));
+//        return auths;
+//    }
+
     public String getPassword() {
         return password;
     }
+
+//    @Override
+//    //此处重写userDetails中的getUsername,返回的并不是姓名，而是uk:phoneNumber
+//    public String getUsername() {
+//        return phoneNumber;
+//    }
+//
+//    @Override
+//    public boolean isAccountNonExpired() {
+//        return true;//账号未过期
+//    }
+//
+//    @Override
+//    public boolean isAccountNonLocked() {
+//        return true;//账号未被锁定
+//    }
+//
+//    @Override
+//    public boolean isCredentialsNonExpired() {
+//        return true; //当修改密码后，账号凭证会过期
+//    }
+//
+//    @Override
+//    public boolean isEnabled() {
+//        return true;//账号被启用
+//    }
 
     public void setPassword(String password) {
         this.password = password;

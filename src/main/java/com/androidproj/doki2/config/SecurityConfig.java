@@ -1,5 +1,6 @@
 package com.androidproj.doki2.config;
 
+import com.androidproj.doki2.serviceImpl.MyUserDetailsService;
 import com.androidproj.doki2.serviceImpl.UserServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,13 +23,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.
                 authorizeRequests()
-                .antMatchers("/login","/user/register/**").permitAll()
+                .antMatchers("/login/**","/user/register/**","/square/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login").loginProcessingUrl("/login/signIn")
-                .usernameParameter("phoneNum").passwordParameter("password")
+                .usernameParameter("username").passwordParameter("password")
                 .successForwardUrl("/login/success")
-                .failureForwardUrl("/login/fail");
+                .failureForwardUrl("/login/fail")
+        .and().csrf().disable();
 
         //配置URL安全规则
         //.authorizeRequests()
@@ -70,7 +72,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     @Override
     public UserDetailsService userDetailsService() {
-        return new UserServiceImpl();
+        return new MyUserDetailsService();
     }
 
 }

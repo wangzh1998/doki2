@@ -13,6 +13,9 @@ public class MyUserDetailsService implements UserDetailsService {
     @Autowired
     UserDao userDao;
 
+    public MyUserDetailsService() {
+    }
+
     //当前方法重写为根据手机号来加载用户信息
     @Override
     public UserDetails loadUserByUsername(String phoneNum) throws UsernameNotFoundException {
