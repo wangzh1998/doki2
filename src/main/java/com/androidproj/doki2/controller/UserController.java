@@ -110,4 +110,19 @@ public class UserController {
         }
     }
 
+
+    //获取我发出的表白
+    @RequestMapping(value = "/query/saying/from")
+    List<Saying>  getMySendedSayings(@RequestParam(name = "userId")int userId) throws Exception{
+        User user = this.userService.getUser(userId);
+        if (user==null)throw new Exception("当前用户不存在");
+        return this.sayingService.getRelatedPrivateFromSayings(userId);
+    }
+    //获取我收到的表白
+    @RequestMapping(value = "/query/saying/to")
+    List<Saying>  getMyGettedSayings(@RequestParam(name = "userId")int userId) throws Exception{
+        User user = this.userService.getUser(userId);
+        if (user==null)throw new Exception("当前用户不存在");
+        return this.sayingService.getRelatedPrivateToSayings(userId);
+    }
 }
