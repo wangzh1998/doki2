@@ -1,7 +1,10 @@
 package com.androidproj.doki2.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Where;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -28,13 +31,15 @@ public class Saying {
     @Column(nullable = false)
     private String fromUserPhoneNum;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String toUserPhoneNum;
 
-    //    @Column(nullable = false)
-//    @CreationTimestamp
+
 //    Timestamp time;
-    @Temporal(TemporalType.TIMESTAMP)
+    //@Temporal(TemporalType.TIMESTAMP)
+   // @CreatedDate
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @CreationTimestamp
     private Date time;
 
     //@Lob //大对象
@@ -76,7 +81,6 @@ public class Saying {
                 ", contents='" + contents + '\'' +
                 ", sayingImageSrc='" + sayingImageSrc + '\'' +
                 ", isPublic=" + isPublic +
-                ", replyList=" + replyList +
                 '}';
     }
 

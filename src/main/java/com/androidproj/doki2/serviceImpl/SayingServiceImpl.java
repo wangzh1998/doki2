@@ -31,7 +31,7 @@ public class SayingServiceImpl implements SayingService {
     @Override
     public Page<Saying> getPublicSayings(Integer pageNum){
         Sort sort = Sort.by(Sort.Direction.DESC,"sayingId");
-        Pageable pageable = PageRequest.of(pageNum,3,sort);
+        Pageable pageable = PageRequest.of(pageNum,10,sort);
         return this.sayingDao.findAllByIsPublic(true,pageable);
         //return this.sayingDao.findAll(pageable);
     }

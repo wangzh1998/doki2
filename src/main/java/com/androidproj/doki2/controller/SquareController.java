@@ -9,16 +9,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/square")
 public class SquareController {
     @Autowired
@@ -27,27 +26,28 @@ public class SquareController {
     SayingService sayingService;
 
     @RequestMapping("/query/sayings")
-    //TODO 做分页查询 需要在contex中维护用户当前查询到的纪录 或者 标页码
-    Page<Saying> getPublicSayings(@RequestParam(name = "pageNum",required = false,defaultValue = "0")int pageNum){
+    //做分页查询 需要在contex中维护用户当前查询到的纪录 或者 标页码
+    List<Saying> getPublicSayings(@RequestParam(name = "pageNum",required = false,defaultValue = "0")int pageNum){
         System.out.println("pageNum==" + pageNum);
         Page<Saying> res = sayingService.getPublicSayings(pageNum);
-        System.out.println("res.getTotalElements()"+res.getTotalElements());
-        System.out.println("res.getContent()"+res.getContent());
-        System.out.println("res.getTotalPages()"+res.getTotalPages());
-        System.out.println(res);
-        return res;
+//        System.out.println("res.getTotalElements()"+res.getTotalElements());
+//        System.out.println("res.getContent()"+res.getContent());
+//        System.out.println("res.getTotalPages()"+res.getTotalPages());
+//        System.out.println(res);
+        return res.getContent();
     }
 
     @RequestMapping("/add/saying")
-    public String addSaying(@RequestParam(name = "sayingContent")String sayingContent,
+    public String addSaying(@RequestParam(name = "userId")int userId,
+                            @RequestParam(name = "sayingContent")String sayingContent,
                             @RequestParam(name = "toUserPhoneNum")String toUserPhoneNum,
                             @RequestParam(name = "sayingImageSrc")String sayingImageSrc,
-                            @RequestParam(name = "isPublic")boolean isPublic) throws Exception {
+                            @RequestParam(name = "isPublic")boolean isPublic) {
+        System.out.println(userId+sayingContent+toUserPhoneNum+sayingImageSrc+isPublic);
+        User from_user =this.userService.getUser(userId);
+        if(from_user==null)return "用户不存在";
         Saying saying = new Saying();
-        //TODO
-        //UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        //User from_user =this.userService.getUser(userDetails.getUsername());
-        User from_user =this.userService.getUser(1);
+        saying.setSayingId(-1);
         saying.setFromUserPhoneNum(from_user.getPhoneNumber());
         saying.setFromUser(from_user);
         saying.setToUserPhoneNum(toUserPhoneNum);

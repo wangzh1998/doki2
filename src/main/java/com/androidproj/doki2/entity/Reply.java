@@ -1,8 +1,11 @@
 package com.androidproj.doki2.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Where;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -22,23 +25,23 @@ public class Reply {
     private User user;
 
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @CreationTimestamp
     private Date time;
 
 
     private String replyContent;
 
 
-    //TODO 一级评论直接与saying相关
+    //一级评论直接与saying相关,二级评论只与一级评论相关
     //@ManyToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST},optional = false,fetch = FetchType.EAGER) //false表示saying不能为空
     @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST},fetch = FetchType.LAZY) //false表示saying不能为空
     //@JsonBackReference
-    @JoinColumn(name="saying_id")
+    @JoinColumn(name="saying_id",nullable = false)
     @JsonIgnoreProperties(value = "replyList")//避免循环查询
     private Saying saying; //int saying_id;//外键，直接在one端(saying)注明，此处不需要声明
 
 
-    //TODO 补充的
     @OneToMany(mappedBy = "fatherReply",fetch = FetchType.EAGER)
     private List<SecondReply> secondReplyList;
 

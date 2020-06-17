@@ -1,7 +1,10 @@
 package com.androidproj.doki2.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Where;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -24,15 +27,15 @@ public class SecondReply {
     //@CreationTimestamp
     //Timestamp time;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @CreationTimestamp
     private Date time;
 
 
     private String replyContent;
 
-    //TODO 补充的
     @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST},fetch = FetchType.LAZY)
-    @JoinColumn(name = "father_reply_id")
+    @JoinColumn(name = "father_reply_id",nullable = false)
     private Reply fatherReply;
 
     @OneToOne
