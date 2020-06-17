@@ -30,6 +30,23 @@ public class SayingController {
     SayingService sayingService;
 
 
+    @RequestMapping("/query/saying")
+    Saying getSaying(@RequestParam(name = "userId")int userId,
+                           @RequestParam(name = "sayingId")int sayingId) throws Exception{
+        User user = userService.getUser(userId);
+        if(user==null)throw new Exception("当前用户不存在");
+        Saying saying = this.sayingService.getSaying(sayingId);
+        if(saying==null)throw new Exception("当前说说不存在");
+
+        if(saying.isPublic()){
+            return saying;
+        }else{
+            if(user.getPhoneNumber().equals(saying.getFromUserPhoneNum())
+                    ||user.getPhoneNumber().equals(saying.getToUserPhoneNum()))
+                return saying;
+            else throw new Exception("当前用户与该说说无关，禁止访问");
+        }
+    }
     @RequestMapping("/query/replies")
     List<Reply> getReplies(@RequestParam(name = "userId")int userId,
                            @RequestParam(name = "sayingId")int sayingId,
